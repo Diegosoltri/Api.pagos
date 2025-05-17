@@ -20,6 +20,6 @@ model Transaccion {
   monto       Float
   estado      String   // e.g. "pendiente", "validada"
   usuarioId   String
-  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
 }
