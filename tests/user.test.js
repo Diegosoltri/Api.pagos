@@ -21,7 +21,14 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
+/**
+ * Pruebas para el endpoint POST /users.
+ * Verifica el registro exitoso y el manejo de errores como correos duplicados.
+ */
 describe("POST /users", () => {
+  /**
+   * Debe registrar un usuario nuevo correctamente si el correo no existe.
+   */
   it("debería registrar un nuevo usuario", async () => {
     const res = await request(app)
       .post("/users")
@@ -36,6 +43,9 @@ describe("POST /users", () => {
     expect(res.body.correo).toBe("testuser@mail.com");
   });
 
+  /**
+   * Debe rechazar el registro si el correo ya está en uso (único por restricción).
+   */
   it("debería rechazar correos duplicados", async () => {
     // Crea uno primero
     await prisma.usuario.create({

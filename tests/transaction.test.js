@@ -47,7 +47,11 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
+// Agrupa las pruebas relacionadas con la validación de transacciones
 describe("POST /transactions/:id/validate", () => {
+    /**
+   * Valida que una transacción con estado "pendiente" pueda ser validada correctamente.
+   */
   it("debería validar una transacción pendiente", async () => {
     const res = await request(app)
       .post(`/transactions/${transaccionPendiente.id}/validate`);
@@ -56,6 +60,9 @@ describe("POST /transactions/:id/validate", () => {
     expect(res.body.estado).toBe("validada");
   });
 
+  /**
+   * Verifica que una transacción ya validada no se pueda volver a validar.
+   */
   it("no debería validar una transacción ya validada", async () => {
     const res = await request(app)
       .post(`/transactions/${transaccionValidada.id}/validate`);
@@ -64,6 +71,9 @@ describe("POST /transactions/:id/validate", () => {
     expect(res.body).toHaveProperty("error");
   });
 
+  /**
+   * Verifica que el servidor responda con 404 si la transacción no existe.
+   */
   it("debería devolver 404 si la transacción no existe", async () => {
     const res = await request(app)
       .post("/transactions/12345678-0000-0000-0000-nonexistent/validate");

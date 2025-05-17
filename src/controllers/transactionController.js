@@ -1,11 +1,20 @@
 const prisma = require("../prisma");
 
-// Crear nueva transacción
+/**
+ * Crea una nueva transacción de pago para un usuario.
+ * 
+ * @route POST /transactions
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {number} req.body.monto - Monto de la transacción.
+ * @param {string} req.body.estado - Estado inicial (ej. "pendiente").
+ * @param {string} req.body.usuarioId - ID del usuario relacionado.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @returns {Object} Transacción creada o mensaje de error.
+ */
 exports.createTransaction = async (req, res) => {
   const { monto, estado, usuarioId } = req.body;
 
   try {
-    // Verifica que el usuario exista
     const usuario = await prisma.usuario.findUnique({ where: { id: usuarioId } });
     if (!usuario) {
       return res.status(404).json({ error: "Usuario no encontrado" });
@@ -22,7 +31,15 @@ exports.createTransaction = async (req, res) => {
   }
 };
 
-// Obtener historial de un usuario
+/**
+ * Obtiene el historial de transacciones de un usuario.
+ * 
+ * @route GET /transactions/:userId
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {string} req.params.userId - ID del usuario.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @returns {Array} Lista de transacciones o error del servidor.
+ */
 exports.getTransactionsByUser = async (req, res) => {
   const { userId } = req.params;
 
@@ -39,6 +56,15 @@ exports.getTransactionsByUser = async (req, res) => {
   }
 };
 
+/**
+ * Valida una transacción pendiente y actualiza su estado a "validada".
+ * 
+ * @route POST /transactions/:id/validate
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {string} req.params.id - ID de la transacción.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @returns {Object} Transacción validada o mensaje de error.
+ */
 exports.validateTransaction = async (req, res) => {
   const { id } = req.params;
 
