@@ -20,7 +20,7 @@ Esta API REST permite gestionar usuarios y transacciones de pago. Incluye endpoi
 - **PostgreSQL**
 - **Jest** + **Supertest** (pruebas unitarias)
 - **CI/CD** con GitHub Actions 
-- Despliegue en [Render/Railway] (agrega link si lo haces)
+- Despliegue en [Render] (agrega link si lo haces)
 
 ---
 
